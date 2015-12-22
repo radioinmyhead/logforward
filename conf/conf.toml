@@ -1,0 +1,17 @@
+port = "8000"
+[module.faceid]
+from="json"
+to =["local"]
+[module.cache]
+from="normal"
+to =["Elasticsearch","wb"]
+[module.nginx]
+from="ng_access"
+to =[ "http","Elasticsearch","local"]
+
+
+[send.http.elasticsearch]
+mothod="POST"
+url="http://localhost:8001"
+[send.http.wb]
+mothod="POST"
