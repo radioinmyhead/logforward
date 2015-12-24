@@ -18,6 +18,7 @@ func (s *SendHttpEs) SetTimestamp(t string) {
 
 	uid := uuid.NewV4().String()
 
-	s.Data = `{"create":{"_index":"log","_type":"service","_id":"` +
-		s.Timestamp + `,` + uid + `"}}` + `\n` + s.Data
+	tmp := `{"create":{"_index":"log","_type":"service","_id":"` +
+		s.Timestamp + `,` + uid + `"}}` + `\n` + string(s.Data)
+	s.Data = []byte(tmp)
 }

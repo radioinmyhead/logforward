@@ -7,9 +7,12 @@ import (
 )
 
 type LogNgxWb struct {
+	RB Rules
 }
 
 func (l *LogNgxWb) Parse(data []byte, v interface{}) (err error) {
+	// rule
+	l.RB = wbRules
 
 	// check
 	t := reflect.TypeOf(v)
@@ -26,7 +29,7 @@ func (l *LogNgxWb) Parse(data []byte, v interface{}) (err error) {
 	if err := json.Unmarshal(data, &js); err != nil {
 		return err
 	}
-	tmp["host"] = js.Host
+	tmp["Host"] = js.Host
 	for k, v := range js.Code {
 		tmp[k] = fmt.Sprintf("%v", v)
 	}

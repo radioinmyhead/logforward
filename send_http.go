@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -15,7 +14,7 @@ type SendHttp struct {
 	Data   []byte
 }
 
-func (s *SendHttp) httpDo() (ret []byte, err error) {
+func (s *SendHttp) httpDo() (data []byte, err error) {
 
 	client := &http.Client{
 		Timeout: time.Second,
@@ -26,7 +25,7 @@ func (s *SendHttp) httpDo() (ret []byte, err error) {
 		return
 	}
 
-	for k, v := range header {
+	for k, v := range s.Header {
 		req.Header.Set(k, v)
 	}
 
@@ -47,5 +46,8 @@ func (s *SendHttp) httpDo() (ret []byte, err error) {
 func (s *SendHttp) Send(data []byte) (err error) {
 	s.Data = data
 	_, err = s.httpDo()
+	return
+}
+func (s *SendHttp) GetUrl() {
 	return
 }
