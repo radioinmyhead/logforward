@@ -1,5 +1,0 @@
-package logforward
-
-import (
-	"fmt"
-)

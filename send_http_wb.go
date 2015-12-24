@@ -1,1 +1,5 @@
-package logforward
+package forward
+
+type SendHttpWb struct {
+	SendHttp
+}

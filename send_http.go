@@ -1,54 +1,51 @@
-package logforward
+package forward
 
 import (
-	"http"
+	"bytes"
+	"io/ioutil"
+	"net/http"
+	"strings"
+	"time"
 )
 
-type SendHttpBase struct {
-	SendBase
+type SendHttp struct {
+	Method string
 	Url    string
-	Mothod string
-	Header [][]string
+	Header map[string]string
+	Data   []byte
 }
 
-type HttpSender interface {
-	Set(interface{}) error
-	Send() error
-	HttpSetUrl(string)
-	HttpSetMothod(string)
-	HttpSetHeader(string, string)
-	HttpSetData()
-}
+func (s *SendHttp) httpDo() (ret []byte, err error) {
 
-var (
-	httpSender = map[string]HttpSender{}
-)
-
-func (s *SendHttpBase) HttpSetUrl(u string) {
-	s.Url = u
-}
-func (s *SendHttpBase) HttpSetMothod(m string) {
-	s.Mothod(m)
-}
-func (s *SendHttpBase) HttpSetHeader(k, v string) {
-	if s.Header == nil {
-		s.Header = make([][]string)
+	client := &http.Client{
+		Timeout: time.Second,
 	}
-	s.Header = append(s, []string{k, v})
-}
-func (s *SendHttpBase) HttpSetData() {
-	return
-}
 
-func (h *SendHttpBase) Send() (err error) {
-	var s *HttpSender
-	s = h
-	client = &http.Client{}
-	req, err := http.NewRequest(s.Mothod, url, bytes.NewBuffer(s.D))
+	req, err := http.NewRequest(s.Method, s.Url, bytes.NewBuffer(data))
 	if err != nil {
 		return
 	}
-	req.Header.Set("Content-Type", "application/json")
 
+	for k, v := range header {
+		req.Header.Set(k, v)
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+	return body, nil
+}
+
+func (s *SendHttp) Send(data []byte) (err error) {
+	s.Data = data
+	_, err = s.httpDo()
 	return
 }
