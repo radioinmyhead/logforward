@@ -17,7 +17,7 @@ func (f *ForNgxEs) Forward(data []byte, dic map[string]string) (err error) {
 		ret[k] = v
 	}
 	sendhttp := GetSender("es").(*SendHttp)
-	sendes := &SendHttpEs{*sendhttp, ret["time_local"]}
+	sendes := &SendHttpEs{*sendhttp, ret["timestamp"]}
 	d, _ := json.Marshal(ret)
 	sendes.Send(d)
 	return

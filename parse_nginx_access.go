@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	ngxRe     = regexp.MustCompile(`^([^ ]+) - ([^ ]+) \[([^\]]+)\] "([^ ]+) ([^ ]+) ([^ ]+)" ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)"([^"]+)" "([^"]+)"$`)
-	ngxName   = []string{"raw", "remote_addr", "remote_user", "time_local", "method", "path", "http", "status", "body_bytes_sent", "request_time", "request_length", "http_referer", "http_user_agent"}
+	ngxRe     = regexp.MustCompile(`^([^ ]+) - ([^ ]+) \[([^\]]+)\] "([^ ]+) ([^ ]+) ([^ ]+)" ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) "([^"]+)" "([^"]+)"$`)
+	ngxName   = []string{"raw", "ip", "remote_user", "timestamp", "method", "path", "proto", "status", "body_bytes_sent", "request-time", "request_length", "http-referer", "user-agent"}
 	ngxLayout = "02/Jan/2006:15:04:05 -0700"
 )
 
@@ -57,7 +57,7 @@ func (l *LogNgxAccess) Parse(data []byte, v interface{}) (err error) {
 	names = append(names, ngxName...)
 
 	ngxAssignment(tmp, values, names)
-	ngxGetTs(tmp, "time_local")
+	ngxGetTs(tmp, "timestamp")
 
 	// set
 	reflect.ValueOf(v).Elem().Set(reflect.ValueOf(tmp))
